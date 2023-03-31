@@ -185,7 +185,8 @@ double ThreadCPUUsage() {
   DiagnoseAndExit("getrusage(RUSAGE_LWP, ...) failed");
 #elif defined(CLOCK_THREAD_CPUTIME_ID)
   struct timespec ts;
-  if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts) == 0) return MakeTime(ts);
+  // if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts) == 0) return MakeTime(ts);
+   if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) return MakeTime(ts);
   DiagnoseAndExit("clock_gettime(CLOCK_THREAD_CPUTIME_ID, ...) failed");
 #else
 #error Per-thread timing is not available on your system.
