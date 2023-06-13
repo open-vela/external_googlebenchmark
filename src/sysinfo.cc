@@ -361,7 +361,7 @@ std::vector<CPUInfo::CacheInfo> GetCacheSizesWindows() {
   }
   return res;
 }
-#elif BENCHMARK_OS_QNX
+#elif defined(BENCHMARK_OS_QNX) && (BENCHMARK_OS_QNX)
 std::vector<CPUInfo::CacheInfo> GetCacheSizesQNX() {
   std::vector<CPUInfo::CacheInfo> res;
   struct cacheattr_entry* cache = SYSPAGE_ENTRY(cacheattr);
