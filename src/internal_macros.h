@@ -38,7 +38,9 @@
   #define BENCHMARK_NORETURN
 #endif
 
-#if defined(__CYGWIN__)
+#if defined(__NuttX__)
+  #define BENCHMARK_OS_NUTTX 1
+#elif defined(__CYGWIN__)
   #define BENCHMARK_OS_CYGWIN 1
 #elif defined(_WIN32)
   #define BENCHMARK_OS_WINDOWS 1
