@@ -132,6 +132,10 @@ double ProcessCPUUsage() {
   // same as total time, but this is ok because there aren't long-latency
   // synchronous system calls in Emscripten.
   return emscripten_get_now() * 1e-3;
+#elif defined(BENCHMARK_OS_NUTTX) && !defined(CONFIG_SCHED_CRITMONITOR)
+  struct timespec ts;
+  if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) return MakeTime(ts);
+  DiagnoseAndExit("clock_gettime(CLOCK_MONOTONIC, ...) failed");
 #elif defined(CLOCK_PROCESS_CPUTIME_ID) && !defined(BENCHMARK_OS_MACOSX)
   // FIXME We want to use clock_gettime, but its not available in MacOS 10.11.
   // See https://github.com/google/benchmark/pull/292
@@ -183,10 +187,13 @@ double ThreadCPUUsage() {
   struct rusage ru;
   if (getrusage(RUSAGE_LWP, &ru) == 0) return MakeTime(ru);
   DiagnoseAndExit("getrusage(RUSAGE_LWP, ...) failed");
+#elif defined(BENCHMARK_OS_NUTTX) && !defined(CONFIG_SCHED_CRITMONITOR)
+  struct timespec ts;
+  if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) return MakeTime(ts);
+  DiagnoseAndExit("clock_gettime(CLOCK_MONOTONIC, ...) failed");
 #elif defined(CLOCK_THREAD_CPUTIME_ID)
   struct timespec ts;
-  // if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts) == 0) return MakeTime(ts);
-   if (clock_gettime(CLOCK_MONOTONIC, &ts) == 0) return MakeTime(ts);
+  if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts) == 0) return MakeTime(ts);
   DiagnoseAndExit("clock_gettime(CLOCK_THREAD_CPUTIME_ID, ...) failed");
 #else
 #error Per-thread timing is not available on your system.
