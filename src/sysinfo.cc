@@ -556,7 +556,8 @@ double GetCPUCyclesPerSecond(CPUInfo::Scaling scaling) {
   // suppress diagnostics about it being unused on other paths.
   (void)scaling;
 
-#if defined BENCHMARK_OS_LINUX || defined BENCHMARK_OS_CYGWIN
+#if defined BENCHMARK_OS_LINUX || defined BENCHMARK_OS_CYGWIN || \
+    defined BENCHMARK_OS_NUTTX
   long freq;
 
   // If the kernel is exporting the tsc frequency use that. There are issues
