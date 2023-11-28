@@ -454,11 +454,9 @@ ConsoleReporter::OutputOptions GetOutputOptions(bool force_no_color) {
 }  // end namespace internal
 
 BenchmarkReporter* CreateDefaultDisplayReporter() {
-  static auto default_display_reporter =
-      internal::CreateReporter(FLAGS_benchmark_format,
+  return internal::CreateReporter(FLAGS_benchmark_format,
                                internal::GetOutputOptions())
           .release();
-  return default_display_reporter;
 }
 
 size_t RunSpecifiedBenchmarks() {
